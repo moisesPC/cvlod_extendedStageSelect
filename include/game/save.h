@@ -4,6 +4,9 @@
 #include "ghidra_undefined_types.h"
 #include <ultra64.h>
 
+// Player status: Dead
+#define DEAD 0x80000000
+
 enum enum_save_flags {
     GAME_WAS_SAVED_AT_LEAST_ONCE=1,
     EASY=16,
