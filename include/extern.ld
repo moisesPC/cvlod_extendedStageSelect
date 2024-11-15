@@ -1,13 +1,13 @@
 /* textbox.h */
-createTextboxModule = 0x80082fe0;
-textboxModule_setParams_ASCIIFormattedString = 0x800832f0;
-textboxModule_setColorPalette = 0x80083f20;
-textboxModule_setParams_number = 0x800835d0;
-textboxModule_setASCIIText = 0x80083908;
-textboxModule_setNumber = 0x800839a4;
+createTextboxObject = 0x80082fe0;
+textboxObject_setParams_ASCIIFormattedString = 0x800832f0;
+textboxObject_setColorPalette = 0x80083f20;
+textboxObject_setParams_number = 0x800835d0;
+textboxObject_setASCIIText = 0x80083908;
+textboxObject_setNumber = 0x800839a4;
 
-/* module.h */
-module_curLevel_goToNextFuncAndClearTimer = 0x80001ce8;
+/* object.h */
+object_curLevel_goToNextFuncAndClearTimer = 0x80001ce8;
 
 /* cvlod.h */
 Nisitenma_Ichigo_loaded_files_ptr = 0x801c8830;

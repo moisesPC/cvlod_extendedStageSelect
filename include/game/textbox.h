@@ -1,7 +1,7 @@
 #ifndef TEXTBOX_H
 #define TEXTBOX_H
 
-#include "module.h"
+#include "object.h"
 #include "math.h"
 #include "gfx/model_info.h"
 #include "ghidra_undefined_types.h"
@@ -38,7 +38,7 @@ typedef struct {
     u8 field19_0x27;
     u8 field20_0x28;
     u8 text_print_speed;
-    u8 field22_0x2a; /* Index inside textboxModule's field_0x3C data */
+    u8 field22_0x2a; /* Index inside textboxObject's field_0x3C data */
     u8 text_X_pos_offset;
     void* field24_0x2c; /* Pointer to a texture buffer? */
     u16 number_of_chars_in_text;
@@ -86,7 +86,7 @@ typedef struct {
     undefined field67_0x6e;
     undefined field68_0x6f;
     void* window;               // textboxWindow*
-    void* Module_0x01A8;        // Module_0x01A8*
+    void* Object_0x01A8;        // Object_0x01A8*
     s16 field71_0x78;
     u8 field72_0x7a;
     u8 field73_0x7b;
@@ -122,7 +122,7 @@ typedef struct {
 } textboxData;
 
 typedef struct {
-    ModuleHeader header;
+    ObjectHeader header;
     u16 field_0x02;
     u16 field_0x04;
     model_info* model;
@@ -141,12 +141,12 @@ typedef struct {
     void* field_0x68;       // struct_17*
     u32 field_0x6C;
     u8 field_0x70[4];
-} textboxModule;
+} textboxObject;
 
-extern textboxModule* createTextboxModule(ModuleHeader* parent);
-extern s32 textboxModule_setParams_ASCIIFormattedString(textboxModule* self, const char* ASCII_text, u32 param_3, f32 X_pos, f32 Y_pos, u8 text_print_speed, u8 number_of_lines);
-extern u32 textboxModule_setColorPalette(textboxModule* self, u32 color_palette);
-extern u32 textboxModule_setParams_number(textboxModule * self, u32 number, u32 visual_flags, f32 X_pos, f32 Y_pos, u8 number_of_digits, u8 font);
-extern u32 textboxModule_setASCIIText(textboxModule* self, const char* text_ASCII);
-extern u32 textboxModule_setNumber(textboxModule* self, u32 number);
+extern textboxObject* createTextboxObject(ObjectHeader* parent);
+extern s32 textboxObject_setParams_ASCIIFormattedString(textboxObject* self, const char* ASCII_text, u32 param_3, f32 X_pos, f32 Y_pos, u8 text_print_speed, u8 number_of_lines);
+extern u32 textboxObject_setColorPalette(textboxObject* self, u32 color_palette);
+extern u32 textboxObject_setParams_number(textboxObject * self, u32 number, u32 visual_flags, f32 X_pos, f32 Y_pos, u8 number_of_digits, u8 font);
+extern u32 textboxObject_setASCIIText(textboxObject* self, const char* text_ASCII);
+extern u32 textboxObject_setNumber(textboxObject* self, u32 number);
 #endif

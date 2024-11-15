@@ -1,7 +1,7 @@
 #ifndef EXTENDED_STAGE_SELECT_H
 #define EXTENDED_STAGE_SELECT_H
 
-#include "module.h"
+#include "object.h"
 #include "textbox.h"
 
 // ID of the Nisitenma-Ichigo file we're gonna replace with the overlay
@@ -11,13 +11,13 @@
 #define OPTION_MAX 8
 
 typedef struct {
-    ModuleHeader header;
-    textboxModule** mapNamesTextboxes;
-    textboxModule** headerNamesTextboxes;
-    textboxModule* characterNamesTextbox;
-    textboxModule* YesNoTextbox;
-    textboxModule* spawnTextbox;
-    textboxModule* cutsceneTextbox;
+    ObjectHeader header;
+    textboxObject** mapNamesTextboxes;
+    textboxObject** headerNamesTextboxes;
+    textboxObject* characterNamesTextbox;
+    textboxObject* YesNoTextbox;
+    textboxObject* spawnTextbox;
+    textboxObject* cutsceneTextbox;
     s8 first_string_ID;
     s8 option;
     s8 map;

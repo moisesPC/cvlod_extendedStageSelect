@@ -19,12 +19,12 @@ typedef struct {
     functionInfo current_function[3];
     s16 functionInfo_ID;
     void (*destroy)(void*);                // Officially called "OBJ_destruct"
-    struct ModuleHeader* parent;
-    struct ModuleHeader* next;
-    struct ModuleHeader* child;
-} ModuleHeader;                            // Size = 0x20
+    struct ObjectHeader* parent;
+    struct ObjectHeader* next;
+    struct ObjectHeader* child;
+} ObjectHeader;                            // Size = 0x20
 
-extern void module_curLevel_goToNextFuncAndClearTimer(u16 current_functionInfo[], s16* functionInfo_ID);
+extern void object_curLevel_goToNextFuncAndClearTimer(u16 current_functionInfo[], s16* functionInfo_ID);
 
 // Mostly used inside entrypoint functions
 // Commas at the end of statements needed for matching
