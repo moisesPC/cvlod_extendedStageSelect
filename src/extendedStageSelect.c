@@ -52,7 +52,30 @@ void extendedStageSelect_createTextboxes(extendedStageSelect* self) {
 }
 
 void extendedStageSelect_init(extendedStageSelect* self) {
-    u32 i = 0;
+    u32 i, j;
+
+    // Get selection variable values from common memory
+    self->option = MOD_SELECTED_OPTION;
+    self->map = MOD_SELECTED_MAP;
+    self->character = MOD_SELECTED_CHARACTER;
+    self->alternate_costume = MOD_SELECTED_COSTUME;
+    self->cutscene = MOD_SELECTED_CUTSCENE;
+    self->spawn = MOD_SELECTED_SPAWN;
+    self->first_string_ID = MOD_SELECTED_FIRST_STRING_ID;
+
+    // Prevent cutscene borders from being active if warping to this menu while a cutscene was active
+    if (expansion_pak_enabled) {
+        screen_letterbox_pos_left = 24;
+        screen_letterbox_pos_up = 16;
+        screen_letterbox_pos_right = 472;
+        screen_letterbox_pos_down = 352;
+    }
+    else {
+        screen_letterbox_pos_left = 12;
+        screen_letterbox_pos_up = 8;
+        screen_letterbox_pos_right = 308;
+        screen_letterbox_pos_down = 232;
+    }
 
     /////////////// Headers ///////////////
     // CV64 Extended Map Select
@@ -71,24 +94,28 @@ void extendedStageSelect_init(extendedStageSelect* self) {
     }
 
     /////////////// Map Names ///////////////
-    for (i = 0; i < OPTION_MAX; i++) {
+    for (i = 0, j = self->first_string_ID + i; i < OPTION_MAX; i++, j++) {
+        if (j >= NUM_MAPS) {
+            j = 0;
+        }
+
         // Y pos varies by 20.0f, starting from 90.0f
-        (*textboxObject_setParams_ASCIIFormattedString)(self->mapNamesTextboxes[i], GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, mapNames[i]), 0, -120.0f, 90.f - (20.0f * i), 16, 1);
+        (*textboxObject_setParams_ASCIIFormattedString)(self->mapNamesTextboxes[i], GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, mapNames[j]), 0, -120.0f, 90.f - (20.0f * i), 16, 1);
     }
     // Set the color of the first option to red
-    (*textboxObject_setColorPalette)(self->mapNamesTextboxes[0], TEXT_COLOR_RED);
+    (*textboxObject_setColorPalette)(self->mapNamesTextboxes[self->option], TEXT_COLOR_RED);
 
     /////////////// Character names ///////////////
-    (*textboxObject_setParams_ASCIIFormattedString)(self->characterNamesTextbox, GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, characterNames[0]), 0, -60.0f, -70.f, 16, 1);
+    (*textboxObject_setParams_ASCIIFormattedString)(self->characterNamesTextbox, GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, characterNames[self->character]), 0, -60.0f, -70.f, 16, 1);
 
-    /////////////// Yes / No ///////////////
-    (*textboxObject_setParams_ASCIIFormattedString)(self->YesNoTextbox, GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, YesNoSelection[0]), 0, 100.0f, -70.f, 16, 1);
+    /////////////// Yes / No (Alternate costume) ///////////////
+    (*textboxObject_setParams_ASCIIFormattedString)(self->YesNoTextbox, GET_UNMAPPED_ADDRESS(EXTENDED_STAGE_SELECT_OVERLAY_ID, YesNoSelection[self->alternate_costume]), 0, 100.0f, -70.f, 16, 1);
 
     /////////////// Cutscene ///////////////
-    (*textboxObject_setParams_number)(self->cutsceneTextbox, 0, 0, -58.0f, -90.f, 3, TEXT_FONT_DEFAULT);
+    (*textboxObject_setParams_number)(self->cutsceneTextbox, self->cutscene, 0, -58.0f, -90.f, 3, TEXT_FONT_DEFAULT);
 
     /////////////// Spawn ///////////////
-    (*textboxObject_setParams_number)(self->spawnTextbox, 0, 0, 52.0f, -90.f, 2, TEXT_FONT_DEFAULT);
+    (*textboxObject_setParams_number)(self->spawnTextbox, self->spawn, 0, 52.0f, -90.f, 2, TEXT_FONT_DEFAULT);
 
     // Set background color to black
     background_color.color_u32 = 0x000000FF;
@@ -226,6 +253,15 @@ void extendedStageSelect_loop(extendedStageSelect* self) {
 }
 
 void extendedStageSelect_warpToMap(extendedStageSelect* self) {
+    // Save common memory variables
+    MOD_SELECTED_MAP = self->map;
+    MOD_SELECTED_OPTION = self->option;
+    MOD_SELECTED_CHARACTER = self->character;
+    MOD_SELECTED_COSTUME = self->alternate_costume;
+    MOD_SELECTED_CUTSCENE = self->cutscene;
+    MOD_SELECTED_SPAWN = self->spawn;
+    MOD_SELECTED_FIRST_STRING_ID = self->first_string_ID;
+    
     // If player is dead, revive them, and force their health to be 1.
     // This prevents a crash that happens if the player warps while they're marked as dead
     if ((SaveStruct_gameplay.health <= 0) || (SaveStruct_gameplay.player_status & DEAD)) {
@@ -253,5 +289,6 @@ void extendedStageSelect_warpToMap(extendedStageSelect* self) {
     SaveStruct_gameplay.character = self->character;
     SaveStruct_gameplay.alternate_costume = self->alternate_costume;
     current_opened_menu = NOT_ON_MENU;          // Prevent any menu to open all of the sudden after warping
-    (*changeGameState)(GAMEPLAY);              // Restart the gameplay state with the selected options
+
+    (*changeGameState)(GAMEPLAY);               // Restart the gameplay state with the selected options
 }

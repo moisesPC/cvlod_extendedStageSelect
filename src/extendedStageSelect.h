@@ -117,4 +117,18 @@ const char* headerNames[] = {
     "Spawn:"
 };
 
+extern s8 MOD_SELECTED_MAP;
+extern s8 MOD_SELECTED_CHARACTER;
+extern s8 MOD_SELECTED_COSTUME;
+extern s8 MOD_SELECTED_CUTSCENE;
+extern s8 MOD_SELECTED_SPAWN;
+extern s8 MOD_SELECTED_OPTION;
+extern s8 MOD_SELECTED_FIRST_STRING_ID;
+
+extern u16 screen_letterbox_pos_left;
+extern u16 screen_letterbox_pos_up;
+extern u16 screen_letterbox_pos_right;
+extern u16 screen_letterbox_pos_down;
+extern u16 expansion_pak_enabled;
+
 #endif
